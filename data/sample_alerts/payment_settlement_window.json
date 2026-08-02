@@ -1,0 +1,8 @@
+{
+  "service": "payment-service",
+  "severity": "critical",
+  "metric": "http_5xx_rate_percent",
+  "value": 9.8,
+  "description": "Error rate on POST /v1/charges rose to 9.8%. Settlement workers appear wedged and are not draining the queue. No deploys in the last 48 hours.",
+  "timestamp": "2026-08-01T09:15:00Z"
+}

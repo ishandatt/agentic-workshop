@@ -1,0 +1,8 @@
+{
+  "service": "payment-service",
+  "severity": "critical",
+  "metric": "http_5xx_rate_percent",
+  "value": 12.4,
+  "description": "Error rate on POST /v1/charges climbed from 0.3% to 12.4% over the last 10 minutes. Settlement worker pool showing elevated queue depth. Upstream card processor reports no incident.",
+  "timestamp": "2026-08-01T14:23:11Z"
+}

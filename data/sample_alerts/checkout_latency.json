@@ -1,0 +1,8 @@
+{
+  "service": "checkout-service",
+  "severity": "warning",
+  "metric": "p99_latency_ms",
+  "value": 2840.0,
+  "description": "p99 latency on GET /cart rose from 410ms to 2840ms over 25 minutes. Coincides with a marketing campaign launch. No error rate change.",
+  "timestamp": "2026-08-01T09:05:47Z"
+}

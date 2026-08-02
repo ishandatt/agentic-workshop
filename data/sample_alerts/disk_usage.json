@@ -1,0 +1,8 @@
+{
+  "service": "log-aggregator",
+  "severity": "warning",
+  "metric": "disk_used_percent",
+  "value": 81.5,
+  "description": "Disk usage on log-aggregator-03 crossed 80%. Growth rate is roughly 2% per day. Retention policy is 14 days.",
+  "timestamp": "2026-08-01T03:12:00Z"
+}
