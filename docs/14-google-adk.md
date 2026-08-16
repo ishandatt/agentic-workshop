@@ -279,8 +279,11 @@ callbacks around model and tool calls, and `adk web` — a local UI for stepping
 through runs.
 
 **What it costs:** a Google-shaped view of the world, async everywhere, a
-`google-genai` dependency whether or not you use Gemini, and the LangGraph
-version conflict above.
+`google-genai` dependency whether or not you use Gemini, the LangGraph version
+conflict above, and — to get `adk web` at all — a project laid out the way ADK's
+tooling expects. That last one is the ordinary shape of a framework adoption
+cost: not code you write, but structure you accept. The live experiment below
+makes it concrete.
 
 ---
 
@@ -306,9 +309,28 @@ routing get worse. Descriptions are prompts for other agents, not documentation.
 **Make routing impossible.** Ask "what is going on?" — a question that fits both
 specialists. See which one wins, and whether it is the same one every time.
 
-**Try `adk web`.** Run `adk web` in `modules/14-google-adk/` for a UI over your
-agent. Useful for stepping through a run, and a reminder of what ADK gives you
-that a hand-built loop does not.
+**Try `adk web`.** From the repo root:
+
+```bash
+.venv/bin/adk web modules/14-google-adk/
+```
+
+Open the URL it prints, pick **sre_assistant** from the dropdown, and ask it
+about the payment-service alert. You get the tool calls, their arguments and
+their returns as an inspectable trace — the thing we printed by hand in module 3
+and with `track()` everywhere since.
+
+Then notice *why* it can see that agent. It is not reading `01_adk_agent.py`;
+ADK's tooling ignores flat scripts entirely. It scans for subdirectories holding
+an `agent.py` that exposes a module-level `root_agent`, which is why
+`modules/14-google-adk/sre_assistant/` exists and why it is the one directory in
+this workshop shaped like that. Read the file — it is the same agent as step 1,
+and its docstring is about the constraint rather than the code.
+
+The failure mode is worth seeing once, because it is silent: point `adk web` at
+a folder with no conforming subdirectory and it starts normally and serves an
+**empty dropdown**. No error, no warning, nothing in the log. If the list is
+empty, the layout is wrong — not the agent.
 
 ---
 
