@@ -342,6 +342,6 @@ Our incident responder needs both, and module 9 wires them together.
 
 ---
 
-**Next →** Module 6 — evaluation: everything so far has been judged by reading
+**Next →** [Module 6 — evaluation](06-evaluation.md): everything so far has been judged by reading
 the output and nodding. That does not scale past a demo, and it cannot tell you
 whether a change made things better. Time to measure.

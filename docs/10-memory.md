@@ -37,6 +37,15 @@ They have different costs, different failure modes, and choosing wrongly is
 expensive. This module builds two of them and points at where the other two
 already exist in the workshop.
 
+## What you'll build
+
+- The same four-turn conversation run three ways — no memory, buffer, summary —
+  with per-turn token costs, so the cost *shape* of each is visible rather than
+  asserted
+- An episodic store: eight past incidents embedded into their own collection,
+  retrieved when a similar alert arrives
+- A comparison of the same new alert answered with and without that recall
+
 ---
 
 ## Concepts in this module

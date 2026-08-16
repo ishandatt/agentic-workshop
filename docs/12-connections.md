@@ -25,10 +25,31 @@ than it should be, and here is what it costs"*:
 - module 8's API opens a Postgres connection per operation
 - nothing anywhere thinks about whether the model is loaded
 
-Those were deliberate, and each is written down where it happens. This module
-measures all three, because a shortcut you have quantified is an engineering
-decision and a shortcut you have not is a bug waiting to be discovered by a
-user.
+Those were deliberate, and each is written down where it happens.
+
+## The problem
+
+None of these shortcuts ever produced a wrong answer, which is exactly why they
+survived. They produce *latency*, and latency hides well: next to a four-second
+model call, a 330 ms handshake looks like noise, and nobody profiles a workshop
+script.
+
+It stops looking like noise under three conditions this workshop never reaches
+and production reaches immediately — many operations per request, a network
+between you and the thing you keep reconnecting to, and traffic that arrives in
+bursts after idle periods.
+
+So the job here is measurement, not repair. A shortcut you have quantified is an
+engineering decision. A shortcut you have not is a bug waiting to be discovered
+by a user, and it will be reported as "the agent is slow sometimes".
+
+## What you'll build
+
+- A side-by-side timing of six MCP tool calls: reconnect-per-call against one
+  held session
+- The same comparison for Postgres, connect-per-query against a pool
+- A cold/warm measurement of Ollama model loading on your own machine — the
+  expensive one, and the one that appears in no code at all
 
 ---
 
@@ -243,7 +264,7 @@ somebody measures it.
 
 ---
 
-**That is the end of the material.** The core workshop is modules 0–9; these
-three bonuses pick up the threads it deliberately left hanging. If you want a
-next step: modules 4 and 6 together (retrieval quality and how you would know)
-repay more effort than anything else here.
+**Next →** [Bonus 4 — LiteLLM](13-litellm.md): bonuses 1–3 closed the threads
+the core workshop left hanging. The remaining five look outwards instead — at
+what changes when this stops being one pipeline on one laptop. It starts with
+the smallest possible question: what if you wanted to call a different model?

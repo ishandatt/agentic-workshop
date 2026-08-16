@@ -494,6 +494,6 @@ production.
 
 ---
 
-**Next →** Module 5 — RAG vs no-RAG: we have retrieval and we have an agent.
+**Next →** [Module 5 — RAG vs no-RAG](05-rag-vs-norag.md): we have retrieval and we have an agent.
 Time to put the two together and measure, on the same alert, exactly what
 grounding buys and what it costs.

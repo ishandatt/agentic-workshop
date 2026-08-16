@@ -23,6 +23,23 @@ Sixteen modules of making a model behave through prompting, schemas, retrieval,
 validation, retries and guardrails. Fine-tuning is the remaining lever, and it is
 the one teams reach for first — usually by mistake.
 
+## The problem
+
+"The model does not do what we want" is one sentence describing at least six
+different problems, and fine-tuning is the correct answer to roughly one of
+them. Reaching for it first is expensive in a way that is easy to miss, because
+the cost is not the training run — that takes two minutes on a laptop, as you
+are about to see.
+
+The cost is everything that arrives with the artefact. A fine-tuned model is a
+thing you must version, evaluate on every change, store, deploy and roll back;
+its dataset needs an owner; and it goes stale the moment either your base model
+or your desired behaviour moves.
+
+So the question this module has to answer is not "can we fine-tune?" — you can,
+locally, in minutes. It is **which problems this actually solves**, and how you
+would know it worked.
+
 ## The order of operations
 
 Try these in order. Most problems are solved before you reach the last one:
@@ -50,6 +67,52 @@ version, evaluate, store and roll back.
 
 **Fine-tune for FORM. Retrieve for FACTS.** If you take one line from this
 module, that is it.
+
+## What you'll build
+
+- A 400-example training set in chat JSONL, split 80/10/10 — plus any
+  human-approved runs harvested from module 9's log
+- A LoRA adapter, trained locally in about two minutes, ~23 MB against a 1 GB
+  base model
+- A held-out before/after measurement on three checks, and an honest account of
+  what the model got *worse* at
+
+---
+
+## Concepts in this module
+
+### Fine-tuning
+
+Continuing to train an existing model on your own examples, so the behaviour you
+want becomes a property of the weights rather than an instruction in the prompt.
+No rules are stated anywhere — the model infers them from consistent examples.
+
+### LoRA (Low-Rank Adaptation)
+
+Full fine-tuning updates every weight and needs optimiser state for all of them.
+LoRA freezes the base model and trains small low-rank adapter matrices alongside
+it — typically well under 1% of the parameters. You get a few megabytes you can
+swap, version and discard, sitting on top of an unmodified base.
+
+### Adapter
+
+The artefact LoRA produces. Small enough to keep a dozen of them for a dozen
+tasks against one base model, applied at load time. This is why "which model are
+we running" stops being a single answer.
+
+### Chat JSONL
+
+The training format: one JSON object per line, each with a `messages` list of
+system/user/assistant turns. It is the same shape most fine-tuning tooling
+accepts, so a dataset built here is not locked to MLX.
+
+### Held-out split
+
+Examples the model never trained on, kept back specifically to measure it. Score
+on data it was trained on and you learn only that it has memory. This is module
+6's discipline applied to weights instead of prompts, and it matters more here
+because a fine-tune produces a confident-looking artefact and a strong urge to
+believe in it.
 
 ---
 
@@ -156,7 +219,7 @@ a clear-eyed view of what that did and did not buy.
 
 ---
 
-## Live experiments
+## Live experiments (10 min)
 
 **Train on 40 examples instead of 400.** Change the count in `01_build_dataset.py`
 and re-run all three steps. Find where format compliance starts to break — that
@@ -271,6 +334,6 @@ dataset nobody reviewed produces a model nobody should trust.
 
 ---
 
-**That is the end of the material** — modules 0–9 core, 10–16 bonus. If you want
-one thing to take further: modules 4 and 6 together, retrieval quality and how
-you would know, repay more effort than anything else here.
+**Next →** [Bonus 8 — n8n](17-n8n.md): every agent in this workshop was built by
+someone who writes Python. Most agents in production were not. What survives when
+the pipeline becomes a picture?

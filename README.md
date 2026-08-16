@@ -24,6 +24,34 @@ Podman VM image, so run the install on decent bandwidth.
 
 ---
 
+## The course
+
+This repo is the environment for a one-day workshop building an incident-
+responder agent. **Start at [`docs/00-course-overview.md`](docs/00-course-overview.md)** —
+it holds the run sheet, the scenario, and the glossary.
+
+**Core — modules 0–9**, in order. Each is a working checkpoint.
+
+| | | | |
+|---|---|---|---|
+| [0 Overview](docs/00-course-overview.md) | [1 Foundations](docs/01-foundations.md) | [2 Triage](docs/02-triage.md) | [3 MCP tools](docs/03-mcp-tools.md) |
+| [4 RAG ingestion](docs/04-rag-ingestion.md) | [5 RAG vs no-RAG](docs/05-rag-vs-norag.md) | [6 Evaluation](docs/06-evaluation.md) | [7 Guardrails](docs/07-guardrails.md) |
+| [8 Human approval](docs/08-approval.md) | [9 Full pipeline](docs/09-full-pipeline.md) | | |
+
+**Bonus — modules 10–17**, largely independent. Bonuses 1–3 close threads the
+core workshop leaves hanging; 4–8 look outwards at what changes beyond one
+laptop. One chain: 13 → 14 → 15. Module 16 needs Apple Silicon; module 17 starts
+a second container.
+
+| | | | |
+|---|---|---|---|
+| [10 Memory](docs/10-memory.md) | [11 Context](docs/11-context.md) | [12 Connections](docs/12-connections.md) | [13 LiteLLM](docs/13-litellm.md) |
+| [14 Google ADK](docs/14-google-adk.md) | [15 LLM gateway](docs/15-llm-gateway.md) | [16 Fine-tuning](docs/16-finetuning.md) | [17 n8n](docs/17-n8n.md) |
+
+Everything below is setup. Do it once, then start at module 0.
+
+---
+
 ## Prerequisites
 
 - macOS (Apple Silicon or Intel)
@@ -286,6 +314,8 @@ CHAT_MODEL=llama3.1:8b ./setup.sh
 .
 ├── setup.sh                  # automated install (Option A above)
 ├── scripts/db.sh             # Postgres container control
+├── scripts/n8n.sh            # n8n container control (bonus 8 only, opt-in)
+├── scripts/check_setup.py    # verifies the stack; run after setup.sh
 ├── requirements.txt
 ├── .env.example              # copy to .env
 ├── common/

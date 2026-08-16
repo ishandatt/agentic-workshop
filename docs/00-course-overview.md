@@ -16,7 +16,7 @@
 |---|---|---|---|
 | 0 | Overview | 20 min | What are we building, and why this way? |
 | 1 | [Foundations](01-foundations.md) | 45 min | What *is* an LLM call, and what does a framework add? |
-| 2 | [Alert triage](02-triage.md) | 45 min | How do we get **structured data** out of a model that only emits text? |
+| 2 | [Alert triage](02-triage.md) | 50 min | How do we get **structured data** out of a model that only emits text? |
 | 3 | [MCP tools](03-mcp-tools.md) | 60 min | How does a model *do* things instead of just describing them? |
 | 4 | [RAG ingestion](04-rag-ingestion.md) | 45 min | How do we teach it facts it was never trained on? |
 | 5 | [RAG vs no-RAG](05-rag-vs-norag.md) | 30 min | Does retrieval actually help, and what does it cost? |
@@ -32,10 +32,17 @@
 | 10 | [Memory](10-memory.md) | 35 min | "Give it memory" means four different things. Which? |
 | 11 | [Context](11-context.md) | 35 min | The conversation stops fitting. What do you drop? |
 | 12 | [Connections](12-connections.md) | 30 min | What do all these reconnections actually cost? |
-| 13 | [LiteLLM](13-litellm.md) | 20 min | One interface for every model — when do you want it? |
-| 14 | [Google ADK](14-google-adk.md) | 30 min | A third agent framework. What changes, what doesn't? |
-| 15 | [LLM gateway](15-llm-gateway.md) | 30 min | Twenty services calling providers directly. Now what? |
+| 13 | [LiteLLM](13-litellm.md) | 30 min | One interface for every model — when do you want it? |
+| 14 | [Google ADK](14-google-adk.md) | 40 min | A third agent framework. What changes, what doesn't? |
+| 15 | [LLM gateway](15-llm-gateway.md) | 40 min | Twenty services calling providers directly. Now what? |
 | 16 | [Fine-tuning](16-finetuning.md) | 45 min | When is training the model the right move? |
+| 17 | [n8n](17-n8n.md) | 40 min | A team builds this on a canvas instead. What survives? |
+
+Bonuses 1–3 close threads the core workshop deliberately leaves hanging; 4–8
+look outwards, at what changes when this stops being one pipeline on one laptop.
+They are largely independent, with one chain: **13 → 14 → 15** build on each
+other. Two carry extra prerequisites: 16 assumes Apple Silicon, and 17 needs a
+second container.
 
 Every module is a working checkpoint. Fall behind and you can jump into the
 next `modules/NN-*` folder and keep going.

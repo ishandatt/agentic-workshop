@@ -406,6 +406,6 @@ module 7 was for.
 
 ---
 
-**Next →** Module 9 — the full pipeline: every piece now exists in its own
+**Next →** [Module 9 — the full pipeline](09-full-pipeline.md): every piece now exists in its own
 folder. Time to wire them into one system and see what an end-to-end incident
 actually costs.

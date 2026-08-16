@@ -3,7 +3,7 @@
 > **The question this module answers:** a model emits text. Our code needs
 > fields. How do we cross that gap reliably enough to build on?
 
-**Time:** ~45 min · **Code:** `modules/02-triage/` · **You need:** module 1 finished and `check_setup.py` green
+**Time:** ~50 min · **Code:** `modules/02-triage/` · **You need:** module 1 finished and `check_setup.py` green
 
 ---
 
@@ -949,7 +949,7 @@ guarantees.
 
 ---
 
-**Next →** Module 3 — MCP tools: triage tells us what the model *thinks*, but
+**Next →** [Module 3 — MCP tools](03-mcp-tools.md): triage tells us what the model *thinks*, but
 it's still guessing from one paragraph. Next we let it go and look — calling
 real tools to check service status, recent deploys, and logs before forming an
 opinion.

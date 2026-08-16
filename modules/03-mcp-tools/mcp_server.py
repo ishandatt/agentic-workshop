@@ -4,11 +4,20 @@ This is a **separate program**. Nothing in it imports LangChain, LangGraph, or
 knows that an LLM exists. That separation is the entire point of MCP: tools are
 published by a server, and any client that speaks the protocol can use them.
 
-You never run this by hand. The agent scripts start it as a subprocess and talk
-to it over stdin/stdout — the "stdio transport". Two ordinary pipes.
+For modules 3 and 12 you never run this by hand. The agent scripts start it as
+a subprocess and talk to it over stdin/stdout — the "stdio transport". Two
+ordinary pipes.
 
 To poke at it yourself:
     python modules/03-mcp-tools/04_mcp_agent.py     # starts it for you
+
+Bonus 8 is the exception. n8n runs in a container and cannot be handed a pipe
+into a process on your host, so there is a second transport behind a flag:
+
+    python modules/03-mcp-tools/mcp_server.py --http    # streamable HTTP, :8765
+
+Nothing above the `if __name__` block changes between the two. Same server
+object, same four tools, same docstrings — which is the point.
 
 MCP (Model Context Protocol) in one paragraph: a small JSON-RPC protocol for
 telling a client "here are the tools I have, here are their argument schemas",
@@ -25,6 +34,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[0]))
 
 from mcp.server.fastmcp import FastMCP
+from mcp.server.transport_security import TransportSecuritySettings
 
 import fake_infra
 
@@ -116,7 +126,82 @@ def restart_service(service: str) -> dict:
 
 
 if __name__ == "__main__":
-    # `transport="stdio"` means: read JSON-RPC requests from stdin, write
-    # responses to stdout. It is why the client can start this file as a plain
-    # subprocess with no ports, no network, and no configuration.
-    server.run(transport="stdio")
+    # Bonus 8 needs this same server reachable from a container, which stdio
+    # cannot do — you cannot pipe stdin to a process in another machine's
+    # namespace. So there is a second transport, and NOTHING above this line
+    # changes for it: same server object, same four tools, same docstrings.
+    #
+    # That is worth pausing on, because it is module 3's whole claim made
+    # testable. The tools do not know what transport carries them, any more
+    # than they know whether the client is LangGraph, ADK, or a drag-and-drop
+    # canvas run by someone who does not write Python.
+    if "--http" in sys.argv:
+        # 0.0.0.0, not the 127.0.0.1 default: a container reaching the host
+        # arrives on a different interface, and a server bound to loopback is
+        # invisible to it. This is the single most common reason "n8n cannot
+        # see my tools".
+        server.settings.host = "0.0.0.0"
+        # Explicit, because FastMCP's default is 8000 — which modules 2, 5 and
+        # 8 already use for their FastAPI services. Two servers silently
+        # fighting over a port is a bad first five minutes.
+        server.settings.port = 8765
+        # DNS-rebinding protection: the transport validates the Host header and
+        # rejects anything it was not told to expect. A browser on a malicious
+        # page cannot then trick your machine into driving a local MCP server,
+        # which is a real attack and a good default.
+        #
+        # What FastMCP actually does here is worth knowing exactly, because the
+        # summaries online get it wrong in both directions:
+        #
+        #   * constructed on a loopback host (our default, 127.0.0.1), it turns
+        #     protection ON and fills in a LOOPBACK allow-list for you —
+        #     ["127.0.0.1:*", "localhost:*", "[::1]:*"]. Not an empty list.
+        #   * constructed on any other host, it passes None, and the middleware
+        #     then defaults protection OFF for backwards compatibility.
+        #
+        # So the loopback default is why `host.containers.internal:8765` — which
+        # is how a container reaches the host — is refused with a rather cryptic
+        # **421 Misdirected Request**. The fix is to name the hosts you expect,
+        # NOT to switch the protection off, which is the first suggestion you
+        # will find online.
+        #
+        # Read once, and note the ordering: we set `host` above AFTER the server
+        # object was built, so the loopback default was already computed. We are
+        # replacing it wholesale here rather than editing it.
+        server.settings.transport_security = TransportSecuritySettings(
+            allowed_hosts=[
+                f"localhost:{server.settings.port}",
+                f"127.0.0.1:{server.settings.port}",
+                # how a Podman/Docker container addresses the host it runs on
+                f"host.containers.internal:{server.settings.port}",
+                f"host.docker.internal:{server.settings.port}",
+            ],
+            # NOT ["*"] — that looks like a wildcard and is not one. The matcher
+            # does an exact string compare, then accepts only patterns ending in
+            # ":*", so a bare "*" matches nothing except a literal `Origin: *`
+            # header. It appears to work with n8n purely because a server-side
+            # client sends no Origin at all, and an absent Origin is allowed.
+            # Point a browser-based client or MCP Inspector at it and you get a
+            # 403 that looks exactly like the 421 above.
+            allowed_origins=[
+                "http://localhost:*",
+                "http://127.0.0.1:*",
+            ],
+        )
+        # And the honest caveat, since module 7 spends forty-five minutes on
+        # this distinction: none of the above is authentication. An allow-list
+        # of Host headers stops a browser, because the browser sets that header
+        # and the page cannot lie about it. Any non-browser client sets it to
+        # whatever it likes. On `0.0.0.0` with no auth, anyone who can route to
+        # port 8765 can call `restart_service`. That is survivable here only
+        # because fake_infra.py is a dictionary — nothing real is reachable.
+        # A server that touched production would need a token, not a hostname.
+        print(f"ops-tools MCP server on http://localhost:{server.settings.port}"
+              f"{server.settings.streamable_http_path}", file=sys.stderr)
+        server.run(transport="streamable-http")
+    else:
+        # `transport="stdio"` means: read JSON-RPC requests from stdin, write
+        # responses to stdout. It is why the client can start this file as a
+        # plain subprocess with no ports, no network, and no configuration.
+        # This is still the default, so modules 3 and 12 are unaffected.
+        server.run(transport="stdio")

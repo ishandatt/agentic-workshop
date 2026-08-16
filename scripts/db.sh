@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # The workshop database: Postgres 16 + pgvector, run by Podman.
 #
-# There is exactly ONE container in this whole workshop, so there is no
-# compose file — an orchestrator for a single container is ceremony, and
+# This is the only container the core workshop needs — bonus 8 adds an opt-in
+# second one in n8n.sh, and that is the whole list. So there is no compose
+# file: an orchestrator for one long-lived container is ceremony, and
 # `podman compose` is only a shim that needs podman-compose or docker-compose
 # installed separately. A plain `podman run` is fewer moving parts on
 # workshop-morning wifi, and you can read the entire thing below.
@@ -23,6 +24,12 @@ set -euo pipefail
 # and asks which registry you meant, which would hang setup.sh forever.
 IMAGE="docker.io/pgvector/pgvector:pg16"
 CONTAINER="workshop-db"
+
+# Works around Podman resolving every credential helper in ~/.docker/config.json
+# on an anonymous pull. Shared with n8n.sh; the reasoning is in the file.
+# shellcheck source=./_podman_auth.sh
+. "$(dirname "${BASH_SOURCE[0]}")/_podman_auth.sh"
+
 VOLUME="pgdata"
 DB_USER="workshop"
 DB_PASS="workshop"

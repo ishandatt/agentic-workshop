@@ -511,6 +511,6 @@ internal documents. That gap is the next module.
 
 ---
 
-**Next →** Module 4 — RAG ingestion: the agent can see the system but knows
+**Next →** [Module 4 — RAG ingestion](04-rag-ingestion.md): the agent can see the system but knows
 nothing about *your* organisation. We write a runbook full of facts no model
 could have been trained on, and teach the agent to look them up.

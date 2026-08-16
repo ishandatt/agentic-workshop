@@ -348,6 +348,6 @@ that is not a statement about their competence.
 
 ---
 
-**Next →** Module 8 — human approval: the guard flagged the rollback as needing
+**Next →** [Module 8 — human approval](08-approval.md): the guard flagged the rollback as needing
 approval and then nobody was asked. Time to build the pause — stop the agent
 mid-run, persist it, and wait for a person.

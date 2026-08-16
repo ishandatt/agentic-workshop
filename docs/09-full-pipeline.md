@@ -366,7 +366,32 @@ Safe-by-construction is the right order to build in. It is not the finish line.
 
 ---
 
-**Next →** The core workshop ends here. The **bonus modules** pick up the
-threads deliberately left hanging: what "memory" actually means for an agent,
-how to keep a conversation going past the context window, and the connection
-lifecycles this code has been cheerfully ignoring since module 3.
+**Next →** The core workshop ends here. Eight **bonus modules** follow, in two
+groups.
+
+**Bonuses 1–3 close threads this pipeline deliberately left hanging** — and they
+are the ones to do first, because each is a direct answer to something you have
+just watched go unaddressed:
+
+- [Bonus 1 — Memory](10-memory.md): the pipeline forgets every incident the
+  moment it ends. "Give it memory" turns out to mean four different things.
+- [Bonus 2 — Context](11-context.md): the tool loop resends its whole
+  transcript every turn. What happens when that stops fitting?
+- [Bonus 3 — Connections](12-connections.md): three shortcuts this code has
+  taken since module 3, finally measured.
+
+**Bonuses 4–8 look outwards**, at what changes when this stops being one
+pipeline on one laptop:
+
+- [Bonus 4 — LiteLLM](13-litellm.md): one interface for every model
+- [Bonus 5 — Google ADK](14-google-adk.md): a third agent framework, and what
+  is genuinely common to all of them
+- [Bonus 6 — LLM gateway](15-llm-gateway.md): one door for every model call
+- [Bonus 7 — Fine-tuning](16-finetuning.md): the last lever, and the one most
+  teams reach for first by mistake
+- [Bonus 8 — n8n](17-n8n.md): the same agent built on a canvas by someone who
+  does not write Python, and which of modules 6, 7 and 8 survive the move
+
+They are largely independent, with one chain: 13 → 14 → 15 build on each other.
+Two carry extra prerequisites: 16 assumes Apple Silicon, and 17 starts a second
+container.

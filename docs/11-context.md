@@ -31,6 +31,15 @@ Agent loops reach that limit unusually fast, for a reason obvious in hindsight:
 each turn resends the entire conversation, so cumulative tokens grow with the
 *square* of the turn count.
 
+## What you'll build
+
+- A real tool loop instrumented turn by turn, so you can watch input tokens
+  quintuple while output tokens stay flat
+- A breakdown of where those tokens actually live, by message type — which is
+  not where most people guess
+- Four continuation strategies measured on the same conversation, including the
+  one your framework defaults to and the fact that it silently drops your setup
+
 ---
 
 ## Concepts in this module
